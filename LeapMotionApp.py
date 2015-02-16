@@ -21,10 +21,30 @@ class LeapMotionListener(Leap.Listener):
 		print "Motion Sensor disconnected"
 
 	def on_exit(self,controller):
-		print "Excited"
+		print "Exited"
 
 	def on_frame(self, controller):
-		pass
+		frame = controller.frame()
+
+		print "Frame ID: " + str(frame.id) \
+		+ " timeStamp: " + str(frame.timestamp) \
+		+ " #of Hands: " + str(len(frame.hands)) \
+		+ " #of fingers: " + str(len(frame.fingers)) \
+		+ " #of tools: " + str(len(frame.tools)) \
+		+ " #of gesters: "+ str(len(frame.gestures()))
+
+		for hand in frame.hands:
+			handType = "Left Hand" if hand.is_left else "Right Hand"
+
+			print handType + " Hand ID: "+str(frame.id) +" Palm Position: "+str(hand.palm_position)
+
+			normal= hand.palm_normal
+			direction = hand.direction
+
+			print " Pitch: "+ str(direction.pitch * Leap.RAD_TO_DEG) + \
+			      " Roll: " + str(normal.roll * Leap.RAD_TO_DEG) +\
+			      " Yaw: " + str(direction.yaw * Leap.RAD_TO_DEG)
+
 
 def main():
 	listener = LeapMotionListener()
